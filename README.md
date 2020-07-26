@@ -36,3 +36,8 @@ When you open the gnuradio file `polyphase_single.grc` you have a not too comple
 
 Never ever connect your SDR to an antenna as this might be illegal in your country! Always use a dummy load or a direct connection to another SDR for receiving (make sure to use a low transmission power to not brick your second SDR).
 
+## Performance figures
+* 30 banks, 3 channels use a bit more than 1 core of a Raspberry Pi 4B with full CPU load
+  * polyphase synthesizer uses ~75 % of one core
+  * each channel uses just under 10 % of one core additionally
+  * hack rf data transmission uses another 10 %
