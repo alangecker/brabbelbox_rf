@@ -7,13 +7,14 @@
 # GNU Radio Python Flow Graph
 # Title: multi_fm_transmit
 # Author: matthias
-# GNU Radio version: 3.8.1.0
+# GNU Radio version: 3.10.5.0
 
 from gnuradio import analog
 from gnuradio import audio
 from gnuradio import filter
 from gnuradio.filter import firdes
 from gnuradio import gr
+from gnuradio.fft import window
 import sys
 import signal
 from argparse import ArgumentParser
@@ -23,18 +24,20 @@ import osmosdr
 import time
 
 
+
+
 class polyphase(gr.top_block):
 
     def __init__(self):
-        gr.top_block.__init__(self, "multi_fm_transmit")
+        gr.top_block.__init__(self, "multi_fm_transmit", catch_exceptions=True)
 
         ##################################################
         # Variables
         ##################################################
         self.num_banks = num_banks = 30
         self.mod_rate = mod_rate = 200000
-        self.taps_rs = taps_rs = firdes.low_pass_2(25.0, 25.0, 0.1, 0.1, 60, firdes.WIN_KAISER, 7.0)
-        self.taps = taps = firdes.low_pass_2(8, num_banks*mod_rate, 120e3, 50e3, 80, firdes.WIN_BLACKMAN_HARRIS)
+        self.taps_rs = taps_rs = firdes.low_pass_2(25.0, 25.0, 0.1, 0.1, 60, window.WIN_KAISER, 7.0)
+        self.taps = taps = firdes.low_pass_2(8, num_banks*mod_rate, 120e3, 50e3, 80, window.WIN_BLACKMAN_HARRIS)
         self.aud_rate = aud_rate = 48000
 
         ##################################################
@@ -76,25 +79,24 @@ class polyphase(gr.top_block):
         self.analog_wfm_tx_0_0_0 = analog.wfm_tx(
         	audio_rate=mod_rate,
         	quad_rate=mod_rate,
-        	tau=75e-6,
+        	tau=(75e-6),
         	max_dev=75e3,
         	fh=10e3,
         )
         self.analog_wfm_tx_0_0 = analog.wfm_tx(
         	audio_rate=mod_rate,
         	quad_rate=mod_rate,
-        	tau=75e-6,
+        	tau=(75e-6),
         	max_dev=75e3,
         	fh=10e3,
         )
         self.analog_wfm_tx_0 = analog.wfm_tx(
         	audio_rate=mod_rate,
         	quad_rate=mod_rate,
-        	tau=75e-6,
+        	tau=(75e-6),
         	max_dev=75e3,
         	fh=10e3,
         )
-
 
 
         ##################################################
@@ -117,16 +119,16 @@ class polyphase(gr.top_block):
 
     def set_num_banks(self, num_banks):
         self.num_banks = num_banks
-        self.set_taps(firdes.low_pass_2(8, self.num_banks*self.mod_rate, 120e3, 50e3, 80, firdes.WIN_BLACKMAN_HARRIS))
-        self.osmosdr_sink_1.set_sample_rate(self.mod_rate*self.num_banks)
+        self.set_taps(firdes.low_pass_2(8, self.num_banks*self.mod_rate, 120e3, 50e3, 80, window.WIN_BLACKMAN_HARRIS))
+        self.osmosdr_sink_1.set_sample_rate((self.mod_rate*self.num_banks))
 
     def get_mod_rate(self):
         return self.mod_rate
 
     def set_mod_rate(self, mod_rate):
         self.mod_rate = mod_rate
-        self.set_taps(firdes.low_pass_2(8, self.num_banks*self.mod_rate, 120e3, 50e3, 80, firdes.WIN_BLACKMAN_HARRIS))
-        self.osmosdr_sink_1.set_sample_rate(self.mod_rate*self.num_banks)
+        self.set_taps(firdes.low_pass_2(8, self.num_banks*self.mod_rate, 120e3, 50e3, 80, window.WIN_BLACKMAN_HARRIS))
+        self.osmosdr_sink_1.set_sample_rate((self.mod_rate*self.num_banks))
 
     def get_taps_rs(self):
         return self.taps_rs
@@ -149,7 +151,6 @@ class polyphase(gr.top_block):
 
     def set_aud_rate(self, aud_rate):
         self.aud_rate = aud_rate
-
 
 
 

@@ -72,7 +72,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: firdes.low_pass_2(8, num_banks*mod_rate, 120e3, 50e3, 80, firdes.WIN_BLACKMAN_HARRIS)
+    value: firdes.low_pass_2(8, num_banks*mod_rate, 120e3, 50e3, 80, window.WIN_BLACKMAN_HARRIS)
   states:
     bus_sink: false
     bus_source: false
@@ -84,7 +84,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: firdes.low_pass_2(25.0, 25.0, 0.1, 0.1, 60, firdes.WIN_KAISER, 7.0)
+    value: firdes.low_pass_2(25.0, 25.0, 0.1, 0.1, 60, window.WIN_KAISER, 7.0)
   states:
     bus_sink: false
     bus_source: false
@@ -131,7 +131,7 @@ blocks:
     bus_structure: null
     coordinate: [462, 445]
     rotation: 0
-    state: enabled
+    state: true
 - name: analog_wfm_tx_0_0_0
   id: analog_wfm_tx
   parameters:
